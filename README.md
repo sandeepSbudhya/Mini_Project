@@ -8,7 +8,7 @@ A recent version of postman is preferred to test the server via HTTP
 ## Instructions to run the flask server
 
  - Clone the repository
- - change directory to the flask app folder
+ - change directory to the Flask_app folder
  - run the virtual environment, if using pipenv, run the following code to start a shell in the current directory
  - `pipenv shell`
  -  pip install the required packages
