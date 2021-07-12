@@ -1,5 +1,6 @@
 from flask import Flask
 import example_script as script1
+import soupscript as script2
 
 app = Flask(__name__)
 
@@ -14,6 +15,8 @@ def function1():
     }
     return reply
 
-@app.route("/diffroute")
+@app.route("/souproute")
 def function2():
-    return "this is a response from different route"
+    y = script2.Examplesoup()
+    reply = y.printgooglefunc()
+    return reply
