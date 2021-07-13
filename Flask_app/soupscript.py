@@ -6,7 +6,8 @@ class Examplesoup:
         pass
 
     def printgooglefunc(self):
-        URL = "https://www.google.com"
+        URL = "https://www.facebook.com"
         page = requests.get(URL)
         soup = BeautifulSoup(page.content,'lxml')
-        return str(soup)
+        mydivs = soup.find_all("div", {"class": "_8esn"})
+        return str(mydivs)
