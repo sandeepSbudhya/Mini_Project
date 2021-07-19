@@ -2,42 +2,60 @@ import requests
 from pprint import pprint
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urljoin
+import re
 
 class Examplesoup:
     def __init__(self) -> None:
         pass
 
-    def printgooglefunc(self):
-        URL = "https://www.facebook.com"
-        page = requests.get(URL)
-        soup = bs(page.content,'lxml')
-        mydivs = soup.find_all("div", {"class": "_8esn"})
-        return str(mydivs)
+    # def printgooglefunc(self):
+    #     URL = "https://www.facebook.com"
+    #     page = requests.get(URL)
+    #     soup = bs(page.content,'lxml')
+    #     mydivs = soup.find_all("div", {"class": "_8esn"})
+    #     return str(mydivs)
 
-    def get_all_forms(self,url):
-        # Given a `url`, it returns all forms from the HTML content
-        soup = bs(requests.get(url).content, "html.parser")
-        return soup.find_all("form")
+    # def get_all_forms(self,url):
+    #     # Given a `url`, it returns all forms from the HTML content
+    #     soup = bs(requests.get(url).content, "html.parser")
+    #     return soup.find_all("form")
+
+    def extract_links_from(self,url):
+        response = requests.get(url)
+        return re.findall('(?:href=")(.*?)"', response.content.decode(errors="ignore"))
+
+    def crawl(self,url,target_url,target_links):
+        href_links = self.extract_links_from(url)
+        for link in href_links:
+            link = urljoin(url, link)
+
+            if target_url in link and link not in target_links:
+                target_links.append(link)
+                print(link)
+                self.crawl(link,target_url,target_links)
+        return target_links
 
 
-    def get_form_details(self,form):
-        # This function extracts all possible useful information about an HTML `form`
-        details = {}
-        # get the form action (target url)
-        action = form.attrs.get("action").lower()
-        # get the form method (POST, GET, etc.)
-        method = form.attrs.get("method", "get").lower()
-        # get all the input details such as type and name
-        inputs = []
-        for input_tag in form.find_all("input"):
-            input_type = input_tag.attrs.get("type", "text")
-            input_name = input_tag.attrs.get("name")
-            inputs.append({"type": input_type, "name": input_name})
-        # put everything to the resulting dictionary
-        details["action"] = action
-        details["method"] = method
-        details["inputs"] = inputs
-        return details
+
+
+    # def get_form_details(self,form):
+    #     # This function extracts all possible useful information about an HTML `form`
+    #     details = {}
+    #     # get the form action (target url)
+    #     action = form.attrs.get("action").lower()
+    #     # get the form method (POST, GET, etc.)
+    #     method = form.attrs.get("method", "get").lower()
+    #     # get all the input details such as type and name
+    #     inputs = []
+    #     for input_tag in form.find_all("input"):
+    #         input_type = input_tag.attrs.get("type", "text")
+    #         input_name = input_tag.attrs.get("name")
+    #         inputs.append({"type": input_type, "name": input_name})
+    #     # put everything to the resulting dictionary
+    #     details["action"] = action
+    #     details["method"] = method
+    #     details["inputs"] = inputs
+    #     return details
 
 
     def submit_form(self,form_details, url, value):
@@ -80,7 +98,7 @@ class Examplesoup:
         # get all the forms from the URL
         forms = self.get_all_forms(url)
         print(f"[+] Detected {len(forms)} forms on {url}.")
-        js_script = "<Script>alert('hi')</scripT>"
+        js_script = "<script>alert('hi')</script>"
         # returning value
         is_vulnerable = False
         # iterate over all forms
