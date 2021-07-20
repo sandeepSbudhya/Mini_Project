@@ -16,7 +16,11 @@ import ListItem from '@material-ui/core/ListItem';
 import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios'
+
 const useStyles = makeStyles({
+    divstyle:{
+        marginLeft:25
+    },
     card: {
         width: 500,
         padding: 20
@@ -26,7 +30,7 @@ const useStyles = makeStyles({
     },
     title: {
         fontSize: 25,
-        marginLeft: 25
+        marginLeft: 150
     },
     pos: {
         marginBottom: 12,
@@ -41,6 +45,7 @@ const useStyles = makeStyles({
 });
 
 export default function RunTest(props) {
+
     const [state, setState] = React.useState({
         xss: false,
         cors: false,
@@ -54,7 +59,7 @@ export default function RunTest(props) {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
     const classes = useStyles();
-    const clear=()=>{
+    const clear = () => {
         setState({
             xss: false,
             cors: false,
@@ -66,7 +71,10 @@ export default function RunTest(props) {
     const handleSubmit = async () => {
         // console.log(document.getElementById("standard-basic").value)
         props.setActiveTab("Results")
+
         try {
+            
+            props.resultsArrive(false)
             let res = await axios({
                 method: 'post',
                 headers: { "Content-Type": "application/json" },
@@ -77,8 +85,11 @@ export default function RunTest(props) {
                 }
             });
             clear()
-            console.log(res)
-            
+            // console.log(res.status)
+            if (res.status === 200) {
+                props.resultsArrive(true)
+            }
+
 
         } catch (error) {
             console.log(error)
@@ -135,8 +146,21 @@ export default function RunTest(props) {
 
                     </CardContent>
                     <CardActions>
-                        <Button className={classes.button} onClick={handleSubmit} variant="contained" color="primary" size="small">Send</Button>
+                        <Grid
+                            container
+                            spacing={3}
+                            direction="row">
+                            <Grid item xs={3}>
+                                <Button className={classes.button} disabled={!props.results} onClick={handleSubmit} variant="contained" color="primary" size="small">Send</Button>
+                            </Grid>
+
+                        </Grid>
                     </CardActions>
+                    {!props.results && <div className={classes.divstyle}>
+                        <p>Press the Stop Button in at anytime to stop generating and start scanning for vulnerabilities
+                        </p>
+                        <p>Processing...      </p>
+                    </div>}
                 </Card>
 
             </Grid>

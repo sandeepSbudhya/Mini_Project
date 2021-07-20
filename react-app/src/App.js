@@ -17,7 +17,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { Typography } from '@material-ui/core';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import RunTest from './components/RunTest'
+import Results from './components/Results'
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -82,7 +84,7 @@ export default function App() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState("Run Test");
-
+  const[results, resultsArrive] = React.useState(true)
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -149,7 +151,9 @@ export default function App() {
         <Divider />
         <List>
           <ListItem selected={activeTab === "Run Test" ? true : false} button onClick={handleTabClick}>
-            <ListItemIcon></ListItemIcon>
+            <ListItemIcon>
+              <PlayCircleOutlineIcon/>
+            </ListItemIcon>
             <ListItemText primary={"Run Test"} />
           </ListItem>
         </List>
@@ -170,7 +174,7 @@ export default function App() {
         })}
       >
         <div className={classes.drawerHeader} />
-        {activeTab === "Run Test" ? <RunTest setActiveTab={setActiveTab} /> : <></>}
+        {activeTab === "Run Test" ? <RunTest results={results} resultsArrive={resultsArrive} setActiveTab={setActiveTab} /> : <Results results={results} resultsArrive={resultsArrive}/>}
       </main>
     </div>
   );
