@@ -31,7 +31,7 @@ class Spider:
                     test_url = word + "." + url
                     response = self.request(test_url)
                     if response:
-                        print(("[+] Discovered subdomain --> " + test_url))
+                        print(test_url)
                         try:
                             urlstring = "http://"+test_url
                             q.put(urlstring)

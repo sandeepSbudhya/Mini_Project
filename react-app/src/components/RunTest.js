@@ -43,7 +43,7 @@ const useStyles = makeStyles({
 export default function RunTest(props) {
     const [state, setState] = React.useState({
         xss: false,
-        sqli: false,
+        cors: false,
         cj: false,
         sdt: false,
         csrf: false
@@ -57,7 +57,7 @@ export default function RunTest(props) {
     const clear=()=>{
         setState({
             xss: false,
-            sqli: false,
+            cors: false,
             cj: false,
             sdt: false,
             csrf: false
@@ -114,16 +114,12 @@ export default function RunTest(props) {
                                                 label="Cross Site Scripting"
                                             />
                                             <FormControlLabel
-                                                control={<Switch checked={state.sqli} onChange={handleChange} name="sqli" />}
-                                                label="SQL Injection"
+                                                control={<Switch checked={state.sqli} onChange={handleChange} name="cors" />}
+                                                label="CORS"
                                             />
                                             <FormControlLabel
                                                 control={<Switch checked={state.cj} onChange={handleChange} name="cj" />}
                                                 label="Click Jacking"
-                                            />
-                                            <FormControlLabel
-                                                control={<Switch checked={state.sdt} onChange={handleChange} name="sdt" />}
-                                                label="Sub Domain Takeover"
                                             />
                                             <FormControlLabel
                                                 control={<Switch checked={state.csrf} onChange={handleChange} name="csrf" />}

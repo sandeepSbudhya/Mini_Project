@@ -24,8 +24,8 @@ def testpost():
       z=spider.Spider()
       target_url=request.get_json()['url']
       scan_settings=request.get_json()['vulnerabilities']
-      # print(str(scan_settings['xss']))
-      z.executepipeline(target_url,scan_settings)
+      print(str(scan_settings))
+    #   z.executepipeline(target_url,scan_settings)
       return "posted successfully"
    else:
       return "geted"
