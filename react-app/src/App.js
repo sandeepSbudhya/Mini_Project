@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -118,9 +119,16 @@ export default function App() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant={'h6'}>
-            {activeTab}
-          </Typography>
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justifyContent="center">
+            <Typography variant={'h6'}>
+              {activeTab}
+            </Typography>
+          </Grid>
 
         </Toolbar>
       </AppBar>
@@ -162,7 +170,7 @@ export default function App() {
         })}
       >
         <div className={classes.drawerHeader} />
-        {activeTab==="Run Test"?<RunTest/>:<></>}
+        {activeTab === "Run Test" ? <RunTest setActiveTab={setActiveTab} /> : <></>}
       </main>
     </div>
   );
