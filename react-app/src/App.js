@@ -14,12 +14,14 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import HttpIcon from '@material-ui/icons/Http';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { Typography } from '@material-ui/core';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import RunTest from './components/RunTest'
 import Links from './components/Links'
+import Results from './components/Results';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -84,7 +86,8 @@ export default function App() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState("Run Test");
-  const[links, linksArrive] = React.useState("not started")
+  const [links, linksArrive] = React.useState("not started")
+  const [results, fetchResults] = React.useState("not started")
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -97,8 +100,11 @@ export default function App() {
     if (event.target.textContent === "Run Test") {
       setActiveTab("Run Test")
     }
+    else if (event.target.textContent === "Links") {
+      setActiveTab("Links")
+    }
     else {
-      setActiveTab("links")
+      setActiveTab("Results")
     }
   }
 
@@ -128,7 +134,7 @@ export default function App() {
             alignItems="center"
             justifyContent="center">
             <Typography variant={'h6'}>
-              {activeTab === "links"?"Links of Latest Test":activeTab}
+              {activeTab === "links" ? "Links of Latest Test" : activeTab}
             </Typography>
           </Grid>
 
@@ -152,21 +158,28 @@ export default function App() {
         <List>
           <ListItem selected={activeTab === "Run Test" ? true : false} button onClick={handleTabClick}>
             <ListItemIcon>
-              <PlayCircleOutlineIcon/>
+              <PlayCircleOutlineIcon />
             </ListItemIcon>
             <ListItemText primary={"Run Test"} />
           </ListItem>
-        </List>
-        <Divider />
-        <List>
+
+          <Divider />
+
           <ListItem selected={activeTab === "Links" ? true : false} button onClick={handleTabClick}>
             <ListItemIcon>
-              <InboxIcon />
+              <HttpIcon />
             </ListItemIcon>
             <ListItemText primary={"Links"} />
           </ListItem>
+          <Divider />
+          <ListItem selected={activeTab === "Results" ? true : false} button onClick={handleTabClick}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Results"} />
+          </ListItem>
+          <Divider />
         </List>
-        <Divider />
       </Drawer>
       <main
         className={clsx(classes.content, {
@@ -174,7 +187,9 @@ export default function App() {
         })}
       >
         <div className={classes.drawerHeader} />
-        {activeTab === "Run Test" ? <RunTest links={links} linksArrive={linksArrive} setActiveTab={setActiveTab} /> : <Links links={links} linksArrive={linksArrive}/>}
+        {activeTab === "Run Test" ?
+          <RunTest links={links} linksArrive={linksArrive} setActiveTab={setActiveTab} /> : activeTab === "Links" ?
+            <Links links={links} linksArrive={linksArrive} setActiveTab={setActiveTab} fetchResults={fetchResults}/> : <Results results={results} />}
       </main>
     </div>
   );
