@@ -46,18 +46,20 @@ class Spider:
 
     def spider(self,url,):
         print(url)
-        reqs = requests.get(url)
+        reqs = requests.get(url)                               
         soup = bs(reqs.text, 'html.parser')
         count=0
         links = []
         for link in soup.find_all('a'):
             # print(link.get('href'))
-            if count>20:
+            if count>50:
                 break
             count+=1
-            links.append(link.get('href'))
+            urltoappend = urljoin(url,link.get('href'))
+            if urltoappend not in links:
+                links.append(urltoappend)
         return links
-    def executepipeline(self,target_url,scan_settings):
+    def executepipeline(self,target_url,):
         allsubdomainstimestring=self.find_all_subdomains(target_url)
         self.subdomainfilename="subdomains"+allsubdomainstimestring
         with open("./subdomainscans/subdomains"+allsubdomainstimestring,"r") as url_list:

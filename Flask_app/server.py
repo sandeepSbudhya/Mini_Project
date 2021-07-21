@@ -23,9 +23,8 @@ def function1():
 def testpost():
     if request.method == 'POST':
         target_url=request.get_json()['url']
-        scan_settings=request.get_json()['vulnerabilities']
         #   print(str(scan_settings))
-        z.executepipeline(target_url,scan_settings,)
+        z.executepipeline(target_url,)
         return "posted successfully"
     else:
         subdomains=[]

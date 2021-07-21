@@ -19,7 +19,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { Typography } from '@material-ui/core';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import RunTest from './components/RunTest'
-import Results from './components/Results'
+import Links from './components/Links'
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -84,7 +84,7 @@ export default function App() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState("Run Test");
-  const[results, resultsArrive] = React.useState("not started")
+  const[links, linksArrive] = React.useState("not started")
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -98,7 +98,7 @@ export default function App() {
       setActiveTab("Run Test")
     }
     else {
-      setActiveTab("Results")
+      setActiveTab("links")
     }
   }
 
@@ -128,7 +128,7 @@ export default function App() {
             alignItems="center"
             justifyContent="center">
             <Typography variant={'h6'}>
-              {activeTab === "Results"?"Results of Latest Test":activeTab}
+              {activeTab === "links"?"Links of Latest Test":activeTab}
             </Typography>
           </Grid>
 
@@ -159,11 +159,11 @@ export default function App() {
         </List>
         <Divider />
         <List>
-          <ListItem selected={activeTab === "Results" ? true : false} button onClick={handleTabClick}>
+          <ListItem selected={activeTab === "Links" ? true : false} button onClick={handleTabClick}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
-            <ListItemText primary={"Results"} />
+            <ListItemText primary={"Links"} />
           </ListItem>
         </List>
         <Divider />
@@ -174,7 +174,7 @@ export default function App() {
         })}
       >
         <div className={classes.drawerHeader} />
-        {activeTab === "Run Test" ? <RunTest results={results} resultsArrive={resultsArrive} setActiveTab={setActiveTab} /> : <Results results={results} resultsArrive={resultsArrive}/>}
+        {activeTab === "Run Test" ? <RunTest links={links} linksArrive={linksArrive} setActiveTab={setActiveTab} /> : <Links links={links} linksArrive={linksArrive}/>}
       </main>
     </div>
   );
