@@ -84,7 +84,7 @@ export default function App() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState("Run Test");
-  const[results, resultsArrive] = React.useState(true)
+  const[results, resultsArrive] = React.useState("not started")
   const handleDrawerOpen = () => {
     setOpen(true);
   };

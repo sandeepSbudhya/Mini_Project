@@ -28,5 +28,16 @@ def testpost():
         z.executepipeline(target_url,scan_settings,)
         return "posted successfully"
     else:
-        return str(z.target_link_list)
+        subdomains=[]
+        links=[]
+        with open("./subdomainscans/"+z.subdomainfilename,"r") as sdlist:
+            for sd in sdlist:
+                subdomains.append(sd.strip())
+        with open("./linkscans/"+z.linksfilename,"r") as llist:
+            for l in llist:
+                links.append(l.strip())
+        return {
+            "subdomains":subdomains,
+            "links":links
+        }
 

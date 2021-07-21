@@ -74,7 +74,7 @@ export default function RunTest(props) {
 
         try {
             
-            props.resultsArrive(false)
+            props.resultsArrive("false")
             let res = await axios({
                 method: 'post',
                 headers: { "Content-Type": "application/json" },
@@ -87,7 +87,7 @@ export default function RunTest(props) {
             clear()
             // console.log(res.status)
             if (res.status === 200) {
-                props.resultsArrive(true)
+                props.resultsArrive("true")
             }
 
 
