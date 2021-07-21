@@ -1,4 +1,3 @@
-
 # Mini Project
 
 ## Prerequisites
@@ -17,8 +16,7 @@ A recent version of postman is preferred to test the server via HTTP
  -  `export FLASK_APP=server.py`
  - run the following code to run the flask server on http://localhost:5000
  - `flask run`
-## Pinging the server
-send a get request to http://localhost:5000 using postman or any http testing client of choice to get a response 
-## Soup
-send a get request to http://localhost:5000/souproute using postman or any http testing client of choice to get a response of facebook.coms html 
-send a get request to http://localhost:5000 using postman or any http testing client of choice to get a response 
+## Running a test
+send a post request to http://localhost:5000/test using postman or any http testing client of choice to get a response 
+## Obtaining Results Object
+send a get request to http://localhost:5000/test using postman or any http testing client of choice to get a response
