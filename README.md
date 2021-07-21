@@ -12,13 +12,15 @@ A recent version of postman is preferred to test the server via HTTP
  - run the virtual environment, if using pipenv, run the following code to start a shell in the current directory
  - `pipenv shell`
  -  pip install the required packages
- - run the following code in the terminal (with the virtual environment active) to point flask to the file that is to the app
+ - run the following code in the terminal (with the virtual environment active) to point flask to the file that is, to the App
  -  `export FLASK_APP=server.py`
  - run the following code to run the flask server on http://localhost:5000
  - `flask run`
  ## Instructions to start the react-app
  
- - open a new shell in the react-app folder and run the following command
+ - open a new shell in the react-app folder and run the following command to install all the dependencies
+ - `npm install`
+ - run the following command once the dependencies are installed
  - `npm start`
  - starts a react-app on http://localhost:3000
 
