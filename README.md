@@ -16,6 +16,12 @@ A recent version of postman is preferred to test the server via HTTP
  -  `export FLASK_APP=server.py`
  - run the following code to run the flask server on http://localhost:5000
  - `flask run`
+ ## Instructions to start the react-app
+ 
+ - open a new shell in the react-app folder and run the following command
+ - `npm start`
+ - starts a react-app on http://localhost:3000
+
 ## Running a test
 send a post request to http://localhost:5000/test using postman or any http testing client of choice to get a response 
 ## Obtaining Results Object
