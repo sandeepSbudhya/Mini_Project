@@ -128,7 +128,7 @@ export default function App() {
             alignItems="center"
             justifyContent="center">
             <Typography variant={'h6'}>
-              {activeTab}
+              {activeTab === "Results"?"Results of Latest Test":activeTab}
             </Typography>
           </Grid>
 

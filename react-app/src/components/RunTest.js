@@ -78,7 +78,7 @@ export default function RunTest(props) {
             let res = await axios({
                 method: 'post',
                 headers: { "Content-Type": "application/json" },
-                url: 'http://localhost:5000/testpost',
+                url: 'http://localhost:5000/test',
                 data: {
                     url: document.getElementById("standard-basic").value,
                     vulnerabilities: state

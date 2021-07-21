@@ -1,30 +1,40 @@
 import React, { useEffect } from 'react';
-import { Card, CardContent } from "@material-ui/core"
+import { Card, CardContent, makeStyles } from "@material-ui/core"
 import Grid from "@material-ui/core/Grid"
 // import { useEffect } from "react"
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import axios from 'axios'
-// const useStyles = makeStyles({
 
-// })
-
+const useStyles = makeStyles(() => ({
+    errormessage: {
+        color: "red"
+    }
+}))
 
 
 
 
 export default function Results(props) {
+    const classes = useStyles();
     const [sd, putsd] = React.useState([])
     const [l, putl] = React.useState([])
+    const [error, puterror] = React.useState("")
     const handleSnapshot = async () => {
-        const res = await axios({
-            method: 'get',
-            url: 'http://localhost:5000/testpost',
-        })
-        if (res.status === 200) {
-            console.log(res.data)
-            putsd(res.data.subdomains)
-            putl(res.data.links)
+        try {
+            const res = await axios({
+                method: 'get',
+                url: 'http://localhost:5000/test',
+            })
+            if (res.status === 200) {
+                console.log(res.data)
+                putsd(res.data.subdomains)
+                putl(res.data.links)
+            }
+
+        } catch (error) {
+            console.log(error)
+            puterror("Something went wrong please restart the test")
         }
     }
 
@@ -37,7 +47,10 @@ export default function Results(props) {
     // const classes = useStyles()
     return (
         <div>
-            <h2></h2>
+            {error && <Grid container justifyContent={"center"}>
+                <h3 className={classes.errormessage}>{error}</h3>
+
+            </Grid>}
             <Grid container spacing={1} justifyContent={"center"}>
                 <Grid item xs={1}>
                     {props.results === "false" && <CircularProgress />}
@@ -50,8 +63,8 @@ export default function Results(props) {
 
                     <Card>
                         <CardContent>
-                            {sd.map((d)=>{
-                                return(<div>
+                            {sd.map((d) => {
+                                return (<div>
                                     {d}
                                 </div>)
                             })}
@@ -64,9 +77,9 @@ export default function Results(props) {
 
                     <Card>
                         <CardContent>
-                            {l.map((link)=>{
-                                return(
-                                    <div>{link!=="#"?link:<p></p>}</div>
+                            {l.map((link) => {
+                                return (
+                                    <div>{link !== "#" ? link : <p></p>}</div>
                                 )
                             })}
                         </CardContent>

@@ -19,7 +19,7 @@ def function1():
     return "root"
 
 
-@app.route('/testpost',methods = ['POST', 'GET'])
+@app.route('/test',methods = ['POST', 'GET'])
 def testpost():
     if request.method == 'POST':
         target_url=request.get_json()['url']
