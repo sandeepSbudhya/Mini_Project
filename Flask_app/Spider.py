@@ -42,12 +42,11 @@ class Spider:
                         count+=1
                     if count>4:
                         break
-                    if count1>100:
-                        if count==0:
-                            with open("./subdomainscans/subdomains"+timestring,"a") as subdomain_file:
-                                subdomain_file.write("http://"+url+"\n")
-                                subdomain_file.close()
-                            break
+                    if count1>200 and count==0:
+                        with open("./subdomainscans/subdomains"+timestring,"a") as subdomain_file:
+                            subdomain_file.write(url+"\n")
+                            subdomain_file.close()
+                        break
                 wordlist_file.close()
         except requests.exceptions.InvalidURL:
             pass
