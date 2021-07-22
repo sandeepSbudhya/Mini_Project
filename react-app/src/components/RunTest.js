@@ -97,8 +97,6 @@ export default function RunTest(props) {
                         </Grid>
                     </CardActions>
                     {props.links === "false" && <div className={classes.divstyle}>
-                        <p>Press the Stop Button in at anytime to stop generating and start scanning for vulnerabilities
-                        </p>
                         <p>Processing...      </p>
                     </div>}
                 </Card>

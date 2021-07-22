@@ -15,8 +15,8 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios'
 
 const useStyles = makeStyles(() => ({
-    sdcard:{
-        marginBottom:10
+    sdcard: {
+        marginBottom: 10
     },
     errormessage: {
         color: "red"
@@ -39,7 +39,7 @@ const useStyles = makeStyles(() => ({
         marginBottom: 12,
     },
     button: {
-        marginBottom:10,
+        marginBottom: 10,
         marginLeft: 25,
     },
     textfield: {
@@ -83,6 +83,21 @@ export default function Links(props) {
         } catch (error) {
             console.log(error)
             puterror("Something went wrong please restart the test")
+        }
+    }
+    const runscan = async () => {
+        props.fetchResults("false")
+        props.setState(state)
+        props.setActiveTab("Results")
+        let res = await axios({
+            method: 'post',
+            url: 'http://localhost:5000/scanner',
+        });
+
+        // console.log(res.status)
+        if (res.status === 200) {
+            //props.fetchResults("true")
+            console.log(res.data)
         }
     }
 
@@ -146,7 +161,7 @@ export default function Links(props) {
                             </List>
                         </CardContent>
                         <CardActions>
-                            <Button variant="contained" color="primary" size="small" className={classes.button}>Scan</Button>
+                            <Button onClick={runscan} variant="contained" color="primary" size="small" className={classes.button}>Scan</Button>
                         </CardActions>
 
                     </Card>}

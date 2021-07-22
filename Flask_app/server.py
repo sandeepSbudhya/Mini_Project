@@ -1,3 +1,4 @@
+from os import close
 from flask import Flask,request
 import Spider as spider
 from flask_cors import CORS
@@ -40,11 +41,29 @@ def testpost():
             "links":links
         }
 
+
 @app.route('/scanner', methods = ['POST', 'GET'])
 def vuln_scan():
-    links = []
+    d = y.run_scanner(z.linksfilename)
+    return d
+
+
+
+@app.route('/scan',methods = ['POST', 'GET'])
+def runscanner():
+
+    if request.method == 'POST':
+        data = request.get_json()
+        if data and data['vulnscan']['xss'] == True:
+            return z.xssvulnlist
+        else:
+            return {}
     with open("./linkscans/"+z.linksfilename,"r") as llist:
         for l in llist:
-            y.run_scanner
-
+            bool = z.scan_xss(l)
+            if bool:
+                z.xssvulnlist[l]=True
+            llist.close()
+        return "scan finished"
+    
 
