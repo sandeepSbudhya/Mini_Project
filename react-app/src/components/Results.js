@@ -73,7 +73,7 @@ export default function Results(props) {
                         <CardContent>
                             {Object.keys(l).map((link,value) => {
                                 return (
-                                    <div >{link !== "#" ? <p>{link}</p> : <p></p>}</div>
+                                    <div>{link} </div>
                                 )
                             })}
                         </CardContent>
