@@ -44,26 +44,19 @@ def testpost():
 
 @app.route('/scanner', methods = ['POST', 'GET'])
 def vuln_scan():
-    d = y.run_scanner(z.linksfilename)
-    return d
-
-
-
-@app.route('/scan',methods = ['POST', 'GET'])
-def runscanner():
-
     if request.method == 'POST':
-        data = request.get_json()
-        if data and data['vulnscan']['xss'] == True:
-            return z.xssvulnlist
-        else:
-            return {}
-    with open("./linkscans/"+z.linksfilename,"r") as llist:
-        for l in llist:
-            bool = z.scan_xss(l)
-            if bool:
-                z.xssvulnlist[l]=True
-            llist.close()
-        return "scan finished"
+        data=request.get_json()
+        if data and data['xss'] == True:
+            d = y.run_scanner(z.linksfilename)
+            if not d:
+                return{
+                    "No vulnerabilities found":True
+                }
+            return d
+        return {
+            "Scanning for this feature will be implemented in the future":True
+        }
+
+
     
 

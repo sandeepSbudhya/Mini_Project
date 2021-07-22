@@ -91,12 +91,15 @@ export default function Links(props) {
         props.setActiveTab("Results")
         let res = await axios({
             method: 'post',
+            headers: { "Content-Type": "application/json" },
             url: 'http://localhost:5000/scanner',
+            data:state
         });
 
         // console.log(res.status)
         if (res.status === 200) {
-            //props.fetchResults("true")
+            props.fetchResults("true")
+            props.setvulns(res.data)
             console.log(res.data)
         }
     }

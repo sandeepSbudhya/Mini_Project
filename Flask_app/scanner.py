@@ -50,7 +50,7 @@ class Scanner:
         self.get_links(filename, )
         xss_vuln_list = {}
         for l in self.target_urls:
-            print("Testin in " +l)
+            # print("Testin in " +l)
             forms = self.extract_forms(l)
             if forms:
                 for form in forms:

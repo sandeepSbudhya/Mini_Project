@@ -89,6 +89,7 @@ export default function App() {
   const [links, linksArrive] = React.useState("not started")
   const [results, fetchResults] = React.useState("not started")
   const [state, setState] = React.useState({})
+  const [vulns, setvulns] = React.useState({})
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -190,7 +191,7 @@ export default function App() {
         <div className={classes.drawerHeader} />
         {activeTab === "Run Test" ?
           <RunTest links={links} linksArrive={linksArrive} setActiveTab={setActiveTab} /> : activeTab === "Links" ?
-            <Links links={links} linksArrive={linksArrive} setActiveTab={setActiveTab} setState={setState} fetchResults={fetchResults}/> : <Results state={state} results={results} />}
+            <Links setvulns={setvulns} links={links} linksArrive={linksArrive} setActiveTab={setActiveTab} setState={setState} fetchResults={fetchResults}/> : <Results vulns={vulns} state={state} results={results} />}
       </main>
     </div>
   );

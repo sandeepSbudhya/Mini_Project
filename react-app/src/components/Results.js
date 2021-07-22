@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Card, CardContent, makeStyles } from "@material-ui/core"
 import Grid from "@material-ui/core/Grid"
-import axios from 'axios'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 const useStyles = makeStyles(() => ({
@@ -47,24 +46,7 @@ export default function Results(props) {
     const [error, puterror] = React.useState("")
 
     const handleSnapshot = async () => {
-        try {
-            const res = await axios({
-                method: 'post',
-                headers: { "Content-Type": "application/json" },
-                url: 'http://localhost:5000/scan',
-                data:{
-                    "vulnscan":props.state
-                }
-            })
-            if (res.status === 200) {
-                console.log(res.data)
-                putl(res.data)
-            }
-
-        } catch (error) {
-            console.log(error)
-            puterror("Something went wrong please restart the scan")
-        }
+        putl(props.vulns)
     }
 
     useEffect(() => {
@@ -91,7 +73,7 @@ export default function Results(props) {
                         <CardContent>
                             {Object.keys(l).map((link,value) => {
                                 return (
-                                    <div key={link}>{link !== "#" ? <p>{link} is vulnerable to XSS </p> : <p></p>}</div>
+                                    <div >{link !== "#" ? <p>{link}</p> : <p></p>}</div>
                                 )
                             })}
                         </CardContent>
