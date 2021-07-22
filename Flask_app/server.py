@@ -49,11 +49,13 @@ def runscanner():
         data = request.get_json()
         if data and data['vulnscan']['xss'] == True:
             return z.xssvulnlist
-        with open("./linkscans/"+z.linksfilename,"r") as llist:
-            for l in llist:
-                bool = z.scan_xss(l)
-                if bool:
-                    z.xssvulnlist[l]=True
+        else:
+            return {}
+    with open("./linkscans/"+z.linksfilename,"r") as llist:
+        for l in llist:
+            bool = z.scan_xss(l)
+            if bool:
+                z.xssvulnlist[l]=True
             llist.close()
         return "scan finished"
     
