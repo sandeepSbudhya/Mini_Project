@@ -5,6 +5,7 @@ import re
 from multiprocessing import Process
 from bs4 import BeautifulSoup as bs
 import datetime
+
         
 class Spider:
     subdomainfilename=""

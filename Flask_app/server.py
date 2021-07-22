@@ -2,13 +2,13 @@ from flask import Flask,request
 import Spider as spider
 from flask_cors import CORS
 import multiprocessing
-
+import scanner as sc
 
 cors_config = {
     "origins":["http://localhost:3000"]
 }
 z=spider.Spider()
-
+y=sc.Scanner()
 app = Flask(__name__)
 CORS(app,resources={
     r"/*":cors_config
@@ -39,4 +39,12 @@ def testpost():
             "subdomains":subdomains,
             "links":links
         }
+
+@app.route('/scanner', methods = ['POST', 'GET'])
+def vuln_scan():
+    links = []
+    with open("./linkscans/"+z.linksfilename,"r") as llist:
+        for l in llist:
+            y.run_scanner
+
 
