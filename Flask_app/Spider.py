@@ -30,6 +30,7 @@ class Spider:
             with open("./subdomains-wordlist.txt", "r") as wordlist_file:
                 for line in wordlist_file:
                     count1+=1
+                    print(count1)
                     word = line.strip()
                     test_url = word + "." + url
                     response = self.request(test_url)
@@ -42,7 +43,8 @@ class Spider:
                         count+=1
                     if count>4:
                         break
-                    if count1>200 and count==0:
+                    if count1>9 and count==0:
+                        print("here")
                         with open("./subdomainscans/subdomains"+timestring,"a") as subdomain_file:
                             subdomain_file.write(url+"\n")
                             subdomain_file.close()
@@ -66,6 +68,8 @@ class Spider:
             urltoappend = urljoin(url,link.get('href'))
             if urltoappend not in links:
                 links.append(urltoappend)
+        if len(links) == 0:
+            links.append(url)
         return links
 
     def get_all_forms(self,url):

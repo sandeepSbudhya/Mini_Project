@@ -87,6 +87,7 @@ export default function Links(props) {
     }
     const runscan = async () => {
         props.fetchResults("false")
+        props.setState(state)
         props.setActiveTab("Results")
         let res = await axios({
             method: 'post',

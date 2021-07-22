@@ -49,11 +49,16 @@ export default function Results(props) {
     const handleSnapshot = async () => {
         try {
             const res = await axios({
-                method: 'get',
+                method: 'post',
+                headers: { "Content-Type": "application/json" },
                 url: 'http://localhost:5000/scan',
+                data:{
+                    "vulnscan":props.state
+                }
             })
             if (res.status === 200) {
                 console.log(res.data)
+                putl(res.data)
             }
 
         } catch (error) {
@@ -84,9 +89,9 @@ export default function Results(props) {
 
                     <Card>
                         <CardContent>
-                            {l.map((link) => {
+                            {Object.keys(l).map((link,value) => {
                                 return (
-                                    <div>{link !== "#" ? link : <p></p>}</div>
+                                    <div key={link}>{link !== "#" ? <p>{link} is vulnerable to XSS </p> : <p></p>}</div>
                                 )
                             })}
                         </CardContent>

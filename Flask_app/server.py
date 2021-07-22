@@ -44,17 +44,16 @@ def testpost():
 
 @app.route('/scan',methods = ['POST', 'GET'])
 def runscanner():
+        
     if request.method == 'POST':
-        # target_url="http://www.google.com"
-        # bool=z.scan_xss(target_url)
-        # return str(bool)
-
+        data = request.get_json()
+        if data and data['vulnscan']['xss'] == True:
+            return z.xssvulnlist
         with open("./linkscans/"+z.linksfilename,"r") as llist:
             for l in llist:
                 bool = z.scan_xss(l)
                 if bool:
-                    z.xssvulnlist['l']=True
+                    z.xssvulnlist[l]=True
             llist.close()
         return "scan finished"
-    if request.method == 'GET':
-        return z.xssvulnlist
+    
