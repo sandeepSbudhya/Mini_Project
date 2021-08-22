@@ -24,7 +24,6 @@ def function1():
 def testpost():
     if request.method == 'POST':
         target_url=request.get_json()['url']
-        #   print(str(scan_settings))
         z.executepipeline(target_url,)
         return "posted successfully"
     else:

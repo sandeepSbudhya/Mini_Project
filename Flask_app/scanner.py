@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import requests
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urljoin
@@ -7,33 +5,34 @@ from urllib.parse import urljoin
 from requests.sessions import InvalidSchema
 import Spider
 
+#scanner module
 class Scanner:
-    target_urls = []
+    target_urls = []   #class variable availiable throughout class holds all links
     def __init__(self):
         self.session = requests.Session()
 
-
+    # reads all links from links file and returns list
     def get_links(self, filename, ):
         with open("./linkscans/" + filename, "r") as links:
              for link in links:
                 self.target_urls.append(link)
 
 
-
+    # extracts all the forms in given link
     def extract_forms(self, url):
         try:
             response = self.session.get(url)
             if response:
-                print(response)
-                parsed_html = bs(response.content, 'html.parser')
-                # print(parsed_html.find('form'))
-                return parsed_html.findAll("form")
+                print("here")
+                parsed_html = bs(response.text, 'html.parser')
+                return parsed_html.findAll('form')
             return []
         except requests.exceptions.ConnectionError:
             pass
         except requests.exceptions.InvalidSchema:
             pass
 
+    # submits form with given javascript payload
     def submit_form(self, form, value, url):
         action = form.get("action")
         post_url = urljoin(url, action)
@@ -49,10 +48,27 @@ class Scanner:
 
             post_data[input_name] = input_value
         if method == "post":
-            return self.session.post(post_url, data=post_data)
-        return self.session.get(post_url, params=post_data)
+            return requests.post(post_url, data=post_data)
+        return requests.get(post_url, params=post_data)
 
-
+    # test for xss vulnerability in link 
+    def test_xss_in_link(self, url):
+        xss_test_script = "<script>alert(1)</script>"
+        url = url.replace("=", "=" + xss_test_script)
+        try:
+            response = requests.get(url)
+            return xss_test_script in str(response.content)
+        except requests.exceptions.InvalidSchema:
+            pass
+    # test for xss vulnerability in form 
+    def test_xss_in_form(self,form,url):
+        xss_test_script = "<script>alert(1)</script>"
+        try:
+            response = self.submit_form(form, xss_test_script, url)
+            return xss_test_script in str(response.content)
+        except requests.exceptions.InvalidSchema:
+            pass
+    # main function to run the entire operation returns dict of all vulnerabilities as key value pairs
     def run_scanner(self, filename):
         
         self.get_links(filename, )
@@ -66,7 +82,7 @@ class Scanner:
                     print("[+] Testing form in " + l)
                     is_vulnerable = self.test_xss_in_form(form, l)
                     if is_vulnerable:
-                        print(is_vulnerable)
+                        # print(is_vulnerable)
                         xss_vuln_list[l] = True
                         print("XSS discovered in " + l + " in the following form")
                         print(form)
@@ -82,22 +98,6 @@ class Scanner:
         return xss_vuln_list
         
 
-    def test_xss_in_link(self, url):
-        xss_test_script = "<script>alert(1)</script>"
-        url = url.replace("=", "=" + xss_test_script)
-        try:
-            response = self.session.get(url)
-            return xss_test_script in str(response.content)
-        except requests.exceptions.InvalidSchema:
-            pass
-
-    def test_xss_in_form(self,form,url):
-        xss_test_script = "<script>alert(1)</script>"
-        try:
-            response = self.submit_form(form, xss_test_script, url)
-            return xss_test_script in str(response.content)
-        except requests.exceptions.InvalidSchema:
-            pass
 
 
 

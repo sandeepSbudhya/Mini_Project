@@ -27,4 +27,4 @@ A recent version of postman is preferred to test the server via HTTP
 ## Running a test
 send a post request to http://localhost:5000/test using postman or any http testing client of choice to get a response 
 ## Obtaining Results Object
-send a get request to http://localhost:5000/scan using postman or any http testing client of choice to get a response
+send a get request to http://localhost:5000/scanner using postman or any http testing client of choice to get a response
