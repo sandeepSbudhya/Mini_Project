@@ -3,6 +3,8 @@
 import requests
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urljoin
+
+from requests.sessions import InvalidSchema
 import Spider
 
 class Scanner:
@@ -22,11 +24,16 @@ class Scanner:
         try:
             response = self.session.get(url)
             if response:
+                print(response)
                 parsed_html = bs(response.content, 'html.parser')
+                # print(parsed_html.find('form'))
                 return parsed_html.findAll("form")
             return []
         except requests.exceptions.ConnectionError:
             pass
+        except requests.exceptions.InvalidSchema:
+            pass
+
     def submit_form(self, form, value, url):
         action = form.get("action")
         post_url = urljoin(url, action)
@@ -46,41 +53,51 @@ class Scanner:
         return self.session.get(post_url, params=post_data)
 
 
-    def run_scanner(self,filename):
+    def run_scanner(self, filename):
+        
         self.get_links(filename, )
         xss_vuln_list = {}
+        
         for l in self.target_urls:
-            # print("Testin in " +l)
+            print("Testing in " + l)
             forms = self.extract_forms(l)
             if forms:
                 for form in forms:
-                    print("[+] Testing form in "+ l)
+                    print("[+] Testing form in " + l)
                     is_vulnerable = self.test_xss_in_form(form, l)
                     if is_vulnerable:
+                        print(is_vulnerable)
                         xss_vuln_list[l] = True
                         print("XSS discovered in " + l + " in the following form")
                         print(form)
 
             if "=" in l:
-                 print("[+] testing " + l)
-                 is_vuln = self.test_xss_in_link(l)
-                 if is_vuln:
-                     xss_vuln_list[l] = True
-                     print("XSS discovered in in the following link " + l)
+                print("[+] testing " + l)
+                is_vuln = self.test_xss_in_link(l)
+                if is_vuln:
+                    xss_vuln_list[l] = True
+                    print("XSS discovered in in the following link " + l)
+    
 
         return xss_vuln_list
+        
 
     def test_xss_in_link(self, url):
-        xss_test_script = "image src =q onerror=prompt(8)>"
+        xss_test_script = "<script>alert(1)</script>"
         url = url.replace("=", "=" + xss_test_script)
-        response = self.session.get(url)
-        return xss_test_script in str(response.content)
+        try:
+            response = self.session.get(url)
+            return xss_test_script in str(response.content)
+        except requests.exceptions.InvalidSchema:
+            pass
 
     def test_xss_in_form(self,form,url):
-        xss_test_script = "image src =q onerror=prompt(8)>"
-        response = self.submit_form(form, xss_test_script, url)
-        return xss_test_script in str(response.content)
-
+        xss_test_script = "<script>alert(1)</script>"
+        try:
+            response = self.submit_form(form, xss_test_script, url)
+            return xss_test_script in str(response.content)
+        except requests.exceptions.InvalidSchema:
+            pass
 
 
 
