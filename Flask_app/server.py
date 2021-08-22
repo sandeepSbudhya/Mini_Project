@@ -45,16 +45,20 @@ def testpost():
 def vuln_scan():
     if request.method == 'POST':
         data=request.get_json()
-        if data and data['xss'] == True:
-            d = y.run_scanner(z.linksfilename)
-            if not d:
-                return{
-                    "No vulnerabilities found":True
-                }
+        d={}
+        if data:
+            if data['cors'] or data['csrf']:
+                return "we are currently working on scanning for cors and csrf vulnerabilities, please re-run the scan without these checked."
+            if data['xss'] == True:
+                d['xss'] = y.run_scanner(z.linksfilename)
+                if not d['xss']:
+                    d['xss']=[]
+            if data['cj'] == True:
+                d['clickjacking'] = y.run_clickjacking(z.linksfilename)
+                if not d['clickjacking']:
+                    d['clickjacking']=[]
             return d
-        return {
-            "Scanning for this feature will be implemented in the future":True
-        }
+        return "something went wrong please re-run the test"
 
 
     

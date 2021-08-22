@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => ({
 
 export default function Results(props) {
     const classes = useStyles();
-    const [l, putl] = React.useState([])
+    const [l, putl] = React.useState('')
     const [error, puterror] = React.useState("")
 
     const handleSnapshot = async () => {
@@ -70,12 +70,19 @@ export default function Results(props) {
                     <h4 hidden={props.results === "false" ? true : false}> Results </h4>
 
                     <Card>
-                        <CardContent>
-                            {Object.keys(l).map((link,value) => {
+                        <CardContent>{
+                            typeof (l) === "object" ? Object.keys(l).map((key) => {
                                 return (
-                                    <div>{link} </div>
+                                    <div>
+                                        <h3>{key}</h3>
+                                        {l[key].map((link)=>{
+                                            return(<p>{link}</p>)
+                                        })}
+                                    </div>
+
                                 )
-                            })}
+                            }):<div>{l}</div>
+                        }
                         </CardContent>
                     </Card>
 

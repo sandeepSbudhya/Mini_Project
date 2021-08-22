@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup as bs
 from urllib.parse import urljoin
 
 from requests.sessions import InvalidSchema
-import Spider
+
 
 #scanner module
 class Scanner:
@@ -23,12 +23,9 @@ class Scanner:
         try:
             response = self.session.get(url)
             if response:
-                print("here")
                 parsed_html = bs(response.text, 'html.parser')
                 return parsed_html.findAll('form')
             return []
-        except requests.exceptions.ConnectionError:
-            pass
         except requests.exceptions.InvalidSchema:
             pass
 
@@ -37,7 +34,7 @@ class Scanner:
         action = form.get("action")
         post_url = urljoin(url, action)
         method = form.get("method")
-        inputs_list = form.findAll("Input")
+        inputs_list = form.findAll("input")
         post_data = {}
         for input in inputs_list:
             input_name = input.get("name")
@@ -47,6 +44,7 @@ class Scanner:
                 input_value = value
 
             post_data[input_name] = input_value
+
         if method == "post":
             return requests.post(post_url, data=post_data)
         return requests.get(post_url, params=post_data)
@@ -57,6 +55,7 @@ class Scanner:
         url = url.replace("=", "=" + xss_test_script)
         try:
             response = requests.get(url)
+            print(response.content)
             return xss_test_script in str(response.content)
         except requests.exceptions.InvalidSchema:
             pass
@@ -68,22 +67,23 @@ class Scanner:
             return xss_test_script in str(response.content)
         except requests.exceptions.InvalidSchema:
             pass
+
+
     # main function to run the entire operation returns dict of all vulnerabilities as key value pairs
     def run_scanner(self, filename):
         
         self.get_links(filename, )
-        xss_vuln_list = {}
+        xss_vuln_list = []
         
         for l in self.target_urls:
             print("Testing in " + l)
-            forms = self.extract_forms(l)
+            forms = self.extract_forms(l.strip())
             if forms:
                 for form in forms:
                     print("[+] Testing form in " + l)
                     is_vulnerable = self.test_xss_in_form(form, l)
                     if is_vulnerable:
-                        # print(is_vulnerable)
-                        xss_vuln_list[l] = True
+                        xss_vuln_list.append(l)
                         print("XSS discovered in " + l + " in the following form")
                         print(form)
 
@@ -91,11 +91,25 @@ class Scanner:
                 print("[+] testing " + l)
                 is_vuln = self.test_xss_in_link(l)
                 if is_vuln:
-                    xss_vuln_list[l] = True
-                    print("XSS discovered in in the following link " + l)
+                    if l not in xss_vuln_list:
+                        xss_vuln_list.append(l)
+                    print("XSS discovered in the following link " + l)
     
 
         return xss_vuln_list
+
+
+    def run_clickjacking(self,filename):
+        cjlist=[]
+        if not self.target_urls:
+            self.get_links(filename, )
+        for l in self.target_urls:
+            res=requests.get(l.strip())
+            cj = res.headers.get('X-Frame-Options')
+            if not cj:
+                print(l+" may be vulnerable to click-jacking")
+                cjlist.append(l)
+        return cjlist
         
 
 
