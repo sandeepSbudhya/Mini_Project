@@ -67,8 +67,7 @@ class Spider:
         print(url)
         reqs = requests.get(url)                               
         soup = bs(reqs.text, 'html.parser')
-        print("HTML of subdomain")
-        print(soup.findAll('form'))
+
 
         count=0
         links = []
@@ -87,16 +86,18 @@ class Spider:
 
     # main function to run the entire operation
     def executepipeline(self,target_url,):
+        self.subdomainfilename="" 
+        self.linksfilename="" 
         allsubdomainstimestring=self.find_all_subdomains(target_url)
         self.subdomainfilename="subdomains"+allsubdomainstimestring
         with open("./subdomainscans/subdomains"+allsubdomainstimestring,"r") as url_list:
             ct = datetime.datetime.now()
             ts = ct.timestamp()
             timestring=str(ts)+str(ct)
+            self.linksfilename="links"+timestring
             for line in url_list:
                 links=self.spider(line.strip())
                 with open("./linkscans/links"+timestring,"a") as linkfile:
-                    self.linksfilename="links"+timestring
                     for link in links:
                         linkfile.write(link+"\n")
                     linkfile.close()

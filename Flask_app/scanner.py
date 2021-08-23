@@ -55,7 +55,6 @@ class Scanner:
         url = url.replace("=", "=" + xss_test_script)
         try:
             response = requests.get(url)
-            print(response.content)
             return xss_test_script in str(response.content)
         except requests.exceptions.InvalidSchema:
             pass
@@ -71,7 +70,7 @@ class Scanner:
 
     # main function to run the entire operation returns dict of all vulnerabilities as key value pairs
     def run_scanner(self, filename):
-        
+        self.target_urls=[]
         self.get_links(filename, )
         xss_vuln_list = []
         

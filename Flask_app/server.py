@@ -9,7 +9,7 @@ cors_config = {
     "origins":["http://localhost:3000"]
 }
 z=spider.Spider()
-y=sc.Scanner()
+
 app = Flask(__name__)
 CORS(app,resources={
     r"/*":cors_config
@@ -44,6 +44,7 @@ def testpost():
 @app.route('/scanner', methods = ['POST', 'GET'])
 def vuln_scan():
     if request.method == 'POST':
+        y=sc.Scanner()
         data=request.get_json()
         d={}
         if data:
